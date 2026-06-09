@@ -19,5 +19,5 @@ target_include_directories(${COMPILE_ID} PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/bs-cordl/include
 )
 
-target_compile_options(${COMPILE_ID} PRIVATE -fdeclspec -fda-blocks)
+target_compile_options(${COMPILE_ID} PRIVATE -fdeclspec)
 target_link_options(${COMPILE_ID} PRIVATE -Wl,--no-undefined)
