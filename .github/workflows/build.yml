@@ -1,0 +1,32 @@
+name: Build QMOD
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: fernthedev/qpm-action@v1
+        with:
+          workflow_token: ${{ secrets.GITHUB_TOKEN }}
+          restore: true
+          cache: true
+      - name: Setup NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r27c
+      - name: Move files
+        run: mkdir -p src include && mv main.cpp mod.cpp src/ ; mv main.hpp mod.hpp include/
+      - name: Build
+        run: qpm s build
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+      - name: Package
+        run: qpm qmod build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: auto-play-qmod
+          path: "**/*.qmod"
