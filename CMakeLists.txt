@@ -11,13 +11,13 @@ file(GLOB_RECURSE cpp_file_list ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_library(${COMPILE_ID} SHARED ${cpp_file_list})
 
+file(GLOB extern_includes LIST_DIRECTORIES true ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/*)
+
 target_include_directories(${COMPILE_ID} PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/shared
   ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes
-  ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/beatsaber-hook/shared
-  ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/bs-cordl/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/fmt/include
+  ${extern_includes}
 )
 
 target_compile_options(${COMPILE_ID} PRIVATE -fdeclspec)
