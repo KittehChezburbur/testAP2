@@ -17,6 +17,7 @@ target_include_directories(${COMPILE_ID} PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes
   ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/beatsaber-hook/shared
   ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/bs-cordl/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/fmt/include
 )
 
 target_compile_options(${COMPILE_ID} PRIVATE -fdeclspec)
