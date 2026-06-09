@@ -29,8 +29,8 @@ jobs:
       - name: Make qmod
         run: |
           cp mod.template.json mod.json
-          find . -name "*.so" -exec cp {} . \;
-          zip -j autoplay.qmod mod.json *.so
+          find . -name "lib*.so" -not -path "*/extern/*" -exec cp {} libautoplay.so \;
+          zip -j autoplay.qmod mod.json libautoplay.so
       - uses: actions/upload-artifact@v4
         with:
           name: autoplay-qmod
