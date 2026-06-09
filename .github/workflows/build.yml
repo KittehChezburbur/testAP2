@@ -1,45 +1,23 @@
-name: Build QMOD
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Clean
-        run: rm -f qpm.shared.json
-      - name: Install tools
-        run: sudo apt-get install -y ninja-build
-      - uses: fernthedev/qpm-action@v1
-        with:
-          workflow_token: ${{ secrets.GITHUB_TOKEN }}
-          restore: true
-          cache: true
-      - name: Setup NDK
-        uses: nttld/setup-ndk@v1
-        id: setup-ndk
-        with:
-          ndk-version: r27c
-      - name: Move files
-        run: mkdir -p src include && mv main.cpp mod.cpp src/ ; mv main.hpp mod.hpp include/
-      - name: Build
-        run: |
-          cmake -G Ninja \
-            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-            -DCMAKE_TOOLCHAIN_FILE=${{ steps.setup-ndk.outputs.ndk-path }}/build/cmake/android.toolchain.cmake \
-            -DANDROID_ABI=arm64-v8a \
-            -DANDROID_PLATFORM=android-26 \
-            -B build -S .
-          cmake --build build
-          find build -name "*.so"
-      - name: Make qmod
-        run: |
-          cp mod.template.json mod.json
-          find build -name "libautoplay.so" -exec cp {} . \;
-          zip -j autoplay.qmod mod.json libautoplay.so
-      - uses: actions/upload-artifact@v4
-        with:
-          name: autoplay-qmod
-          path: autoplay.qmod
+cmake_minimum_required(VERSION 3.22)
+project(autoplay)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(MOD_ID "autoplay")
+set(COMPILE_ID "autoplay")
+
+file(GLOB_RECURSE cpp_file_list ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+
+add_library(${COMPILE_ID} SHARED ${cpp_file_list})
+
+target_include_directories(${COMPILE_ID} PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/shared
+  ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes
+  ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/beatsaber-hook/shared
+  ${CMAKE_CURRENT_SOURCE_DIR}/extern/includes/bs-cordl/include
+)
+
+target_compile_options(${COMPILE_ID} PRIVATE -fdeclspec -fda-blocks)
+target_link_options(${COMPILE_ID} PRIVATE -Wl,--no-undefined)
