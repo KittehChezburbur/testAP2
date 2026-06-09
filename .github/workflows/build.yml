@@ -26,13 +26,12 @@ jobs:
         run: qpm s build
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-      - name: Package
-        run: qpm qmod build || true
-      - name: Find qmod
-        run: find . -name "*.qmod" | head -20
+      - name: Make qmod
+        run: |
+          cp mod.template.json mod.json
+          find build -name "*.so" -exec cp {} . \;
+          zip -j auto-play.qmod mod.json *.so
       - uses: actions/upload-artifact@v4
         with:
           name: auto-play-qmod
-          path: |
-            **/*.qmod
-            build/*.so
+          path: auto-play.qmod
