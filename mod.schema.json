@@ -1,0 +1,162 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://questpatcher.qmod/schema/v1.2.0/mod.json",
+  "title": "QMOD mod.json",
+  "description": "Manifest for a Quest mod package (.qmod) targeting the scotland2 modloader.",
+  "type": "object",
+  "required": [
+    "_QPVersion",
+    "name",
+    "id",
+    "author",
+    "version",
+    "packageId",
+    "packageVersion",
+    "description",
+    "modFiles",
+    "lateModFiles",
+    "libraryFiles",
+    "fileCopies",
+    "copyExtensions",
+    "dependencies"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_QPVersion": {
+      "type": "string",
+      "description": "QMOD schema version.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": [
+        "1.2.0"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable mod name.",
+      "minLength": 1
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique mod id (lowercase, no spaces).",
+      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+    },
+    "author": {
+      "type": "string",
+      "description": "Mod author / developer."
+    },
+    "porter": {
+      "type": "string",
+      "description": "Optional credit for whoever ported the mod."
+    },
+    "version": {
+      "type": "string",
+      "description": "Semver version of the mod itself.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+([-+].+)?$"
+    },
+    "packageId": {
+      "type": "string",
+      "description": "Android package id of the target game.",
+      "examples": [
+        "com.beatgames.beatsaber"
+      ]
+    },
+    "packageVersion": {
+      "type": "string",
+      "description": "Target game version this mod is built for.",
+      "examples": [
+        "1.40.8"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "description": "What the mod does."
+    },
+    "coverImage": {
+      "type": "string",
+      "description": "Optional cover image file name inside the archive."
+    },
+    "isLibrary": {
+      "type": "boolean",
+      "description": "Whether this mod is a library consumed by other mods."
+    },
+    "modFiles": {
+      "type": "array",
+      "description": "Early-load .so file names (before il2cpp init).",
+      "items": {
+        "type": "string",
+        "pattern": ".*\\.so$"
+      }
+    },
+    "lateModFiles": {
+      "type": "array",
+      "description": "Late-load .so file names (after il2cpp init). Most mods.",
+      "items": {
+        "type": "string",
+        "pattern": ".*\\.so$"
+      }
+    },
+    "libraryFiles": {
+      "type": "array",
+      "description": "Shared library .so file names.",
+      "items": {
+        "type": "string",
+        "pattern": ".*\\.so$"
+      }
+    },
+    "fileCopies": {
+      "type": "array",
+      "description": "Files to copy to specific destinations on the device.",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "destination"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "File name inside the archive."
+          },
+          "destination": {
+            "type": "string",
+            "description": "Absolute destination path on device."
+          }
+        }
+      }
+    },
+    "copyExtensions": {
+      "type": "array",
+      "description": "File extensions this mod registers a copy handler for.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "Other mods this mod depends on.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "version"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Dependency mod id."
+          },
+          "version": {
+            "type": "string",
+            "description": "Semver range the dependency must satisfy."
+          },
+          "downloadIfMissing": {
+            "type": "string",
+            "description": "URL the loader uses to fetch the dependency if absent."
+          }
+        }
+      }
+    }
+  }
+}
