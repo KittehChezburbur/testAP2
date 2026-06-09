@@ -26,10 +26,12 @@ jobs:
         run: qpm s build
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+      - name: Find so files
+        run: find . -name "*.so" 2>/dev/null
       - name: Make qmod
         run: |
           cp mod.template.json mod.json
-          find . -name "lib*.so" -not -path "*/extern/*" -exec cp {} libautoplay.so \;
+          find . -name "*.so" -not -path "*/extern/*" -exec cp {} libautoplay.so \;
           zip -j autoplay.qmod mod.json libautoplay.so
       - uses: actions/upload-artifact@v4
         with:
