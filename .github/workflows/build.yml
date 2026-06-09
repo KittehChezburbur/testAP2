@@ -28,12 +28,9 @@ jobs:
         run: pwsh ./build.ps1
         env:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
-      - name: Make qmod
-        run: |
-          cp mod.template.json mod.json
-          find build -name "*.so" -not -name "*.debug.so" -exec cp {} libautoplay.so \;
-          zip -j autoplay.qmod mod.json libautoplay.so
+      - name: Show all files
+        run: find . -not -path "*/extern/*" -not -path "*/.git/*" | head -50
       - uses: actions/upload-artifact@v4
         with:
-          name: autoplay-qmod
-          path: autoplay.qmod
+          name: build-output
+          path: build/
