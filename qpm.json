@@ -4,11 +4,11 @@
   "dependenciesDir": "extern",
   "info": {
     "name": "Autoplay",
-    "id": "auto-play",
+    "id": "autoplay",
     "version": "0.1.0",
     "url": "https://github.com/KittehChezburbur/testAP2",
     "additionalData": {
-      "overrideSoName": "libauto-play.so",
+      "overrideSoName": "libautoplay.so",
       "cmake": true
     }
   },
@@ -19,7 +19,7 @@
     },
     "qmodIncludeDirs": [],
     "qmodIncludeFiles": [],
-    "qmodOutput": "auto-play.qmod"
+    "qmodOutput": "autoplay.qmod"
   },
   "dependencies": [
     { "id": "beatsaber-hook", "versionRange": "^6.4.0", "additionalData": {} },
