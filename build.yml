@@ -1,0 +1,3 @@
+qpm restore        # fetch beatsaber-hook, bs-cordl, codegen, scotland2...
+pwsh ./build.ps1   # -> build/libauto-play.so
+qpm qmod build     # -> auto-play.qmod
